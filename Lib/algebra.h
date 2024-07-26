@@ -15,6 +15,7 @@
 #include <cmath>
 #include <limits>
 #include <iomanip>
+#include <initializer_list>
 
 
 /* ВЫЗОВ РЕАЛИЗАЦИЙ */

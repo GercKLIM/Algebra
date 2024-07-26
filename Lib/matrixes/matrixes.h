@@ -7,107 +7,204 @@
 #include "../algebra.h"
 
 
-/* ### ПЕРЕГРУЗКИ ОПЕРАТОРОВ ДЛЯ std::vector<vector<T>> ### */
 
 
-/* Матричное умножение */
-template <typename T>
-std::vector<std::vector<T>> operator*(const std::vector<std::vector<T>>& A, const std::vector<std::vector<T>>& B);
-
-
-/* Функция поэлементного сложения матриц */
-template <typename T>
-std::vector<std::vector<T>> operator+(const std::vector<std::vector<T>>& A, const std::vector<std::vector<T>>& B);
-
-
-/* Функция поэлементного вычитания матриц */
-template <typename T>
-std::vector<std::vector<T>> operator-(const std::vector<std::vector<T>>& A, const std::vector<std::vector<T>>& B);
-
-
-/* Функция для умножения матрицы на вектор */
-template <typename T>
-std::vector<T> operator*(const std::vector<std::vector<T>>& matrix, const std::vector<T>& vec);
-
-
-/* ### ФУНКЦИИ ВЫВОДА МАТРИЦ НА ЭКРАН ### */
-
-/* Функция вывода матрицы на экран */
-template <typename T>
-void print(const std::vector<std::vector<T>>& matrix);
+template<typename T>
+class Matrix {
+private:
+    std::vector<Vector<T>> data;
 
 
 
-/* ### ФУНКЦИИ ДРУГИХ ОПЕРАЦИЙ С МАТРИЦАМИ ### */
+public:
 
-/* Функция для транспонирования матрицы */
-template <typename T>
-std::vector<std::vector<T>> transpose(const std::vector<std::vector<T>>& A);
+    /* ### СОЗДАНИЕ ОБЪЕКТА КЛАССА ### */
 
 
-/* Функция для создания единичной матрицы размера n x n */
-template <typename T>
-std::vector<std::vector<T>> create_identity_matrix(const int& n);
+    /* Создание начального объекта */
+    Matrix() : data(1, Vector<T>(1, 0)) {};
 
 
-/* Функция для поэлементного умножения матриц */
-template <typename T>
-std::vector<std::vector<T>> Multyply(const std::vector<std::vector<T>>& A, const std::vector<std::vector<T>>& B);
+    /* Создание объекта по исходной размерности и значению */
+    Matrix(int rows, int colls, T value) : data(rows, Vector<T>(colls, value)) {};
 
 
-/* Функция округления чисел в матрицах */
-template <typename T>
-std::vector<std::vector<T>> Matrix_round(const std::vector<std::vector<T>>& A, const double& eps);
+    /* Создание объекта по исходному std::vector<Vector<T>>*/
+    Matrix(std::vector<Vector<T>> matrix) {data = matrix;};
 
 
-/* Функция для вычисления нормы матрицы */
-template <typename T>
-T norm(const std::vector<std::vector<T>>& matrix, const int& p = 2);
+    /* Создание объекта по исходному std::vector<std::vector<T>>*/
+    Matrix(const std::vector<std::vector<T>>& matrix) {
+        int rows = matrix.size();
+        int cols = rows > 0 ? matrix[0].size() : 0;
+        data.resize(rows, Vector<T>(cols));
+        for (int i = 0; i < rows; ++i) {
+            data[i] = Vector<T>(matrix[i]);
+        }
+    }
 
 
-/* Функция для вычисления числа обусловленности матрицы c нормой 1*/
-template <typename T>
-T cond_1(const std::vector<std::vector<T>>& matrix);
+    Matrix(std::vector<std::vector<T>>& matrix) {
+        int rows = matrix.size();
+        int cols = rows > 0 ? matrix[0].size() : 0;
+        data.resize(rows, Vector<T>(cols));
+        for (int i = 0; i < rows; ++i) {
+            data[i] = Vector<T>(matrix[i]);
+        }
+    }
 
 
-/* Функция для вычисления числа обусловленности матрицы c нормой 2*/
-template <typename T>
-T cond_2(const std::vector<std::vector<T>>& matrix);
+    /* Создание объекта по исходной длине и  std::vector<T>*/
+    Matrix(int size, std::vector<T> vec) {
+        data(size, Vector<T>(vec.size(), 0));
+        for (int i = 0; i < size; i++){
+            Vector<T> Vec(vec);
+            data[i] = Vec;
+        }
+    };
 
 
-/* Функция для вычисления числа обусловленности матрицы c нормой oo*/
-template <typename T>
-T cond_oo(const std::vector<std::vector<T>>& matrix);
+    /* Создание объекта по исходной длине и Vector<T>*/
+    Matrix(int size, Vector<T> vec) {
+        data(size, Vector<T>(vec.size(), 0));
+        for (int i = 0; i < size; i++){
+            data[i] = vec;
+        }
+    };
 
 
-/* Функция поворота матрицы вправо */
-template <typename T>
-std::vector<std::vector<T>> RotateRight(const std::vector<std::vector<T>>& A);
+    /* Возвращение значения размерности */
+    int size() const {
+        return data.size();
+    }
 
 
-/* Функция поворота матрицы влево */
-template <typename T>
-std::vector<std::vector<T>> RotateLeft(const std::vector<std::vector<T>>& A);
+
+    /* ### ПЕРЕГРУЗКИ ОПЕРАТОРОВ ДЛЯ Matrix ### */
 
 
-// Функция для обратной матрицы с проверкой на вырожденность c определенной точностью
-template <typename T>
-std::vector<std::vector<T>> inverseMatrix(const std::vector<std::vector<T>>& A, const T& eps);
+
+    /* Оператор индексации для неконстантного объекта */
+    Vector<T>& operator[](int index) {
+        return data[index];
+    }
+
+    /* Оператор индексации для константного объекта */
+    const Vector<T>& operator[](int index) const {
+        return data[index];
+    }
 
 
-// Функция для обратной матрицы с проверкой на вырожденность c определенной точностью
-template <typename T>
-std::vector<std::vector<T>> inverseMatrix(const std::vector<std::vector<T>>& A);
+    /* Операция поэлементного сложения матриц */
+    template <typename Y>
+    friend Matrix<Y> operator+(Matrix<Y>& A, Matrix<Y>& B);
 
 
-// Функция обрезки матрицы снизу и справа
-template <typename T>
-std::vector<std::vector<T>> crop_matrix(const std::vector<std::vector<T>>& A, const int& k);
+    /* Операция поэлементного сложения const матриц */
+    template <typename Y>
+    friend Matrix<Y> operator+(const Matrix<Y>& A, const Matrix<Y>& B);
 
 
-/* Функция, вычисляющая определитель матрицы 4х4 */
-template <typename T>
-double det(const std::vector<std::vector<T>>& matrix);
+    /* Функция поэлементного вычитания матриц */
+    template <typename Y>
+    friend Matrix<Y> operator-(Matrix<Y>& A, Matrix<Y>& B);
+
+
+    /* Функция поэлементного вычитания const матриц */
+    template <typename Y>
+    friend Matrix<Y> operator-(const Matrix<Y>& A, const Matrix<Y>& B);
+
+
+    /* Матричное умножение */
+    template <typename Y>
+    friend Matrix<Y> operator*(Matrix<Y>& A, Matrix<Y>& B);
+
+
+    /* Матричное умножение const */
+    template <typename Y>
+    friend Matrix<Y> operator*(const Matrix<Y>& A, const Matrix<Y>& B);
+
+
+    /* Функция для умножения матрицы на вектор */
+    template <typename Y>
+    friend Matrix<Y> operator*(Matrix<Y>& matrix, Matrix<Y>& vec);
+
+
+    /* Функция для умножения const матрицы на const вектор */
+    template <typename Y>
+    friend Matrix<Y> operator*(const Matrix<Y>& matrix, const Matrix<Y>& vec);
+
+
+    /* Определение оператора отрицания для матрицы */
+    template <typename Y>
+    friend Matrix<Y> operator-(Matrix<Y>& matrix);
+
+
+    /* Определение оператора отрицания для const матрицы */
+    template <typename Y>
+    friend Matrix<Y> operator-(const Matrix<Y>& matrix);
+
+
+    /* Определение потока вывода для const матрицы */
+    template <typename Y>
+    friend std::ostream& operator<<(std::ostream& os, const Matrix<Y>& matrix);
+
+    /* ### ФУНКЦИИ ВЫВОДА МАТРИЦ НА ЭКРАН ### */
+
+
+
+    /* Функция вывода матрицы на экран */
+    void print();
+
+    /* Функция крисового вывода матрицы на экран */
+    void print_matr();
+
+
+
+    /* ### ФУНКЦИИ ДРУГИХ ОПЕРАЦИЙ С МАТРИЦАМИ ### */
+
+    /* Функция для транспонирования матрицы */
+    Matrix<T> transpose();
+
+
+    /* Функция для создания единичной матрицы размера n x n */
+    Matrix<T> create_identity_matrix(const int& n);
+
+
+    /* Функция для поэлементного умножения матриц */
+    Matrix<T> Multyply(const std::vector<std::vector<T>>& B);
+
+
+    /* Функция округления чисел в матрицах */
+    Matrix<T> round(const double& eps);
+
+
+    /* Функция для вычисления нормы матрицы */
+    T norm(const int& p);
+
+
+    /* Функция поворота матрицы вправо */
+    Matrix<T> RotateRight();
+
+
+    /* Функция поворота матрицы влево */
+    Matrix<T> RotateLeft();
+
+
+    /* Функция для обратной матрицы с проверкой на вырожденность c определенной точностью */
+    std::vector<std::vector<T>> inverseMatrix(const T& eps);
+
+
+    /* Функция для обратной матрицы с проверкой на вырожденность */
+    std::vector<std::vector<T>> inverseMatrix();
+
+
+    /* Функция обрезки матрицы снизу и справа */
+    std::vector<std::vector<T>> crop_matrix(const int& k);
+
+
+};
+
 
 
 /* ### ВЫЗОВ РЕАЛИЗАЦИИ ### */

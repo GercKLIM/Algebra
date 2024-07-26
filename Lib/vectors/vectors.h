@@ -8,115 +8,217 @@
 
 
 
-/* ### ПЕРЕГРУЗКА ОПЕРАТОРОВ ДЛЯ std::vector<T> ### */
-
-
-
-/* Операция cложения векторов */
 template <typename T>
-std::vector<T> operator+(const std::vector<T>& vec1, const  std::vector<T>& vec2);
+class Vector {
+private:
+    std::vector<T> data;
 
 
-/* Операция вычитания векторов */
-template <typename T>
-std::vector<T> operator-(const std::vector<T>& vec1, const std::vector<T>& vec2);
-
-
-/* Операция почленного умножения векторов */
-template <typename T>
-std::vector<T> operator*(const std::vector<T>& vec1, const std::vector<T>& vec2);
-
-
-/* Операция умножения вектора на число */
-template <typename T>
-std::vector<T> operator*(const T& c, const std::vector<T>& vec2);
-
-
-template <typename T>
-std::vector<T> operator*(const std::vector<T>& vec2, const T& c);
-
-/* Операция деления вектора на число */
-template<typename T>
-std::vector<T> operator/(const std::vector<T>& vec, const T& c);
-
-
-/* Операция почленного деления векторов */
-template <typename T>
-std::vector<T> operator/(const std::vector<T>& vec1, const std::vector<T>& vec2);
-
-
-/* Определение оператора отрицания для матрицы */
-template <typename T>
-std::vector<std::vector<T>> operator-(const std::vector<std::vector<T>>& matrix);
+public:
 
 
 
-/* ### ФУНКЦИИ ВЫВОДА ВЕКТОРА ### */
+    /* ### СОЗДАНИЕ ОБЪЕКТА КЛАССА ### */
 
 
 
-/* Функция вывода вектора на экран */
-template <typename T>
-void print(const std::vector<T>& vec);
+    /* Создание объекта по исходному std вектору */
+    Vector(std::vector<T> vec) : data(vec) {};
 
 
-/* Функция вывода обрезанного вектора на экран */
-template <typename T>
-void print_short(const std::vector<T>& vec, const int& n);
+    /* Создание объекта по исходному std вектору */
+    Vector(const Vector<T>& vec) {
+        int size = vec.size();
+        data.resize(size);
+        for (int i = 0; i < size; i++) {
+            data[i] = vec[i];
+        }
+    }
 
 
-/* Функция, которая красиво выводит вектор*/
-template<typename T>
-void print_vec(const std::vector<T>& vec);
+    /* Создание объекта по исходной длине и значению */
+    Vector(int size, T value = T()) : data(size, value) {};
+
+
+    /* Создание начального объекта */
+    Vector() : data(1, 0){};
+
+
+    /* Создание объекта по массиву */
+    Vector(std::initializer_list<T> initList) : data(initList) {}
+
+
+    /* Возвращение значения длины вектора */
+    int size() const {
+        return data.size();
+    }
 
 
 
-/* ### ФУНКЦИИ ДРУГИХ ОПЕРАЦИЙ С ВЕКТОРАМИ ### */
+    /* ### ПЕРЕГРУЗКА ОПЕРАТОРОВ ДЛЯ std::vector<T> ### */
 
 
 
-/* Функция для скалярного умножения векторов */
-template <typename T>
-T dot(const std::vector<T>& vec1, const std::vector<T>& vec2);
+    /* Доступ к элементам вектора  */
+    T& operator[](int index) {
+        return data[index];
+    }
 
 
-/* Функция для нормы вектора */
-template <typename T>
-T norm(const std::vector<T>& vec, const int& p = 2);
+    /* Доступ к элементам const-вектора */
+    const T& operator[](int index) const {
+        return data[index];
+    }
+
+    /* Операция сложения векторов */
+    template<typename Y>
+    friend Vector<T> operator+(Vector<T>& v1, Vector<T>& v2);
 
 
-/* Функция, которая возращает матрицу комбинаций элементов вектора */
-template<typename T>
-std::vector<std::vector<T>> generateCombinations(const std::vector<T>& vec);
+    /* Операция cложения const векторов */
+    template <typename Y>
+    friend Vector<Y> operator+(const Vector<Y>& vec1, const  Vector<Y>& vec2);
 
 
-/* Функция, возвращает вектор модулей */
-template<typename T>
-std::vector<T> vec_abs(const std::vector<T>& vec);
+    /* Операция вычитания векторов */
+    template <typename Y>
+    friend Vector<Y> operator-(Vector<Y>& vec1, Vector<Y>& vec2);
 
 
-/* Функция, возращающая сумму элементов вектора */
-template<typename T>
-T sum(const std::vector<T>& vec);
+    /* Операция вычитания const векторов */
+    template <typename Y>
+    friend Vector<Y> operator-(const Vector<Y>& vec1, const Vector<Y>& vec2);
 
 
-/* Функция, сортирующая вектор */
-template< typename T>
-std::vector<T> sorted(const std::vector<T>& vec_not_sort);
+    /* Операция почленного умножения векторов */
+    template <typename Y>
+    friend Vector<Y> operator*(Vector<Y>& vec1, Vector<Y>& vec2);
 
 
-/* Функция, возращающая максимальный элемент вектора */
-template<typename T>
-T vec_max(const std::vector<T>& vec);
+    /* Операция почленного умножения const векторов */
+    template <typename Y>
+    friend Vector<Y> operator*(const Vector<Y>& vec1, const Vector<Y>& vec2);
+
+    /* Операция умножения вектора на число */
+    template <typename Y>
+    friend Vector<Y> operator*(Y& c, Vector<Y>& vec2);
 
 
-/* Функция, вычисляющая норму разности векторов */
-double sqr(std::vector<double> vec1, std::vector<double> vec2);
+    /* Операция умножения const вектора на const число */
+    template <typename Y>
+    friend Vector<Y> operator*(const Y& c, const Vector<Y>& vec2);
 
 
-/* Функция для сдвига вектора на n элементов */
-template<typename T>
-std::vector<T> shift(const std::vector<T>& vec, int n);
+    /* Операция умножения const вектора на  число */
+    template <typename Y>
+    friend Vector<Y> operator*(Y& c, const Vector<Y>& vec2);
+
+
+    /* Операция умножения const вектора на  число */
+    template <typename Y>
+    friend Vector<Y> operator*(const Y& c, Vector<Y>& vec2);
+
+
+    /* Операция деления вектора на число */
+    template <typename Y>
+    friend Vector<Y> operator/(Vector<Y>& vec, Y& c);
+
+
+    /* Операция деления const вектора на const число */
+    template <typename Y>
+    friend Vector<Y> operator/(const Vector<Y>& vec, const Y& c);
+
+
+    /* Операция деления вектора на const число */
+    template <typename Y>
+    friend Vector<Y> operator/(Vector<Y>& vec, const Y& c);
+
+
+    /* Операция деления const вектора на число */
+    template <typename Y>
+    friend Vector<Y> operator/(const Vector<Y>& vec, Y& c);
+
+
+    /* Операция почленного деления векторов */
+    template <typename Y>
+    friend Vector<Y> operator/(Vector<Y>& vec1, Vector<Y>& vec2);
+
+
+    /* Операция почленного деления const векторов */
+    template <typename Y>
+    friend Vector<Y> operator/(const Vector<Y>& vec1, const Vector<Y>& vec2);
+
+
+    /* Операция потокового вывода */
+    template<typename Y>
+    friend std::ostream& operator<<(std::ostream& os, Vector<T>& v);
+
+
+    /* Операция потокового вывода для const */
+    template<typename Y>
+    friend std::ostream& operator<<(std::ostream& os, const Vector<Y>& v);
+
+
+
+    /* ### ФУНКЦИИ ВЫВОДА ВЕКТОРА ### */
+
+
+
+    /* Функция вывода вектора на экран */
+    void print();
+
+
+    /* Функция вывода обрезанного вектора на экран */
+    void print(const int& n);
+
+
+    /* Функция, которая красиво выводит вектор*/
+    void print_vec();
+
+
+    /* Функция, которая красиво обрезанный выводит вектор*/
+    void print_vec(const int& n);
+
+
+
+    /* ### ФУНКЦИИ ДРУГИХ ОПЕРАЦИЙ С ВЕКТОРАМИ ### */
+
+
+
+    /* Функция для скалярного умножения векторов */
+    T dot(const Vector<T>& vec2);
+
+
+    /* Функция для нормы вектора */
+    T norm(const int& p);
+
+
+
+    /* Функция, возвращает вектор модулей */
+    Vector<T> abs();
+
+
+    /* Функция, возращающая сумму элементов вектора */
+    T sum();
+
+
+    /* Функция, сортирующая вектор */
+    Vector<T> sort();
+
+
+    /* Функция, возращающая максимальный элемент вектора */
+    T max();
+
+
+    /* Функция для сдвига вектора на n элементов */
+    Vector<T> shift(int n);
+
+};
+
+
+
+
+
 
 
 /* ### ВЫЗОВ РЕАЛИЗАЦИИ ### */

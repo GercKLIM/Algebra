@@ -3,68 +3,70 @@
  *
  * */
 
+#include "../algebra.h"
+
+
+
+/* ### ФУНКЦИИ ВЫВОДА МАТРИЦ НА ЭКРАН ### */
+
+
+
 /* Функция вывода матрицы на экран */
 template <typename T>
-void print(const std::vector<std::vector<T>>& matrix) {
-    for (std::vector<T> row : matrix) {
-        for (T value: row) {
-            std::cout << value << ' ';
-        }
-        std::cout << '\n';
-    }
-    std::cout << std::endl;
+void Matrix<T>::print() {
+    for (int i = 0; i < data.size(); i++)
+        std::cout << data[i] << std::endl;
 }
 
-/* Операция для умножения матрицы на число */
-//template <typename T>
-//vector<vector<T>> operator*(const vector<vector<T>>& A, const T& scalar){
-//    // Создание результирующей матрицы с теми же размерами
-//    vector<vector<T>> result(A.size(), vector<T>(A[0].size(), 0));
-//
-//    // Умножение каждого элемента матрицы на число
-//    for (size_t i = 0; i < A.size(); ++i) {
-//        for (size_t j = 0; j < A[0].size(); ++j) {
-//            result[i][j] = A[i][j] * scalar;
-//        }
-//    }
-//
-//    return result;
-//}
 
 
-/* Операция для умножения  числа на матрицу */
-//template <typename T>
-//vector<vector<T>> operator*(const T& scalar, const vector<vector<T>>& A){
-//    // Создание результирующей матрицы с теми же размерами
-//    vector<vector<T>> result(A.size(), vector<T>(A[0].size(), 0));
-//
-//    // Умножение каждого элемента матрицы на число
-//    for (size_t i = 0; i < A.size(); ++i) {
-//        for (size_t j = 0; j < A[0].size(); ++j) {
-//            result[i][j] = A[i][j] * scalar;
-//        }
-//    }
-//
-//    return result;
-//}
+/* Функция вывода матрицы на экран */
+template <typename T>
+void Matrix<T>::print_matr() {
+    std::cout << "{" << "{" << data[0] << "}";
+    for (int i = 1; i < data.size(); i++) {
+        std::cout << ", {" << data[i] << "}" /*<< std::endl*/;
+    }
+    std::cout << "}";
+}
+
+
+
+/* ### ПЕРЕГРУЗКИ ОПЕРАТОРОВ ДЛЯ Matrix ### */
+
 
 
 /* Операция поэлементного сложения матриц */
-template <typename T>
-std::vector<std::vector<T>> operator+(const std::vector<std::vector<T>>& A, const std::vector<std::vector<T>>& B){
-    // Проверка на совпадение размеров матриц
-    if (A.size() != B.size() || A[0].size() != B[0].size()) {
-        std::cout << "Error: size A != size B in addition matrix." << std::endl;
-        exit(1);
+template<typename T>
+Matrix<T> operator+(Matrix<T>& A, Matrix<T>& B) {
+    if (A.data.size() != B.data.size() || A.data[0].size() != B.data[0].size()) {
+        throw std::invalid_argument("Matrix dimensions must match for addition");
     }
 
-    // Создание результирующей матрицы с теми же размерами
-    std::vector<std::vector<T>> result(A.size(), std::vector<T>(A[0].size(), 0));
+    Matrix<T> result(A.data.size(), A.data[0].size(), 0);
 
-    // Поэлементное сложение
-    for (size_t i = 0; i < A.size(); ++i) {
-        for (size_t j = 0; j < A[0].size(); ++j) {
-            result[i][j] = A[i][j] + B[i][j];
+    for (size_t i = 0; i < A.data.size(); ++i) {
+        for (size_t j = 0; j < A.data[i].size(); ++j) {
+            result.data[i][j] = A.data[i][j] + B.data[i][j];
+        }
+    }
+
+    return result;
+}
+
+
+/* Операция поэлементного сложения сonst матриц */
+template<typename T>
+Matrix<T> operator+(const Matrix<T>& A, const Matrix<T>& B) {
+    if (A.data.size() != B.data.size() || A.data[0].size() != B.data[0].size()) {
+        throw std::invalid_argument("Matrix dimensions must match for addition");
+    }
+
+    Matrix<T> result(A.data.size(), A.data[0].size(), 0);
+
+    for (size_t i = 0; i < A.data.size(); ++i) {
+        for (size_t j = 0; j < A.data[i].size(); ++j) {
+            result.data[i][j] = A.data[i][j] + B.data[i][j];
         }
     }
 
@@ -73,76 +75,149 @@ std::vector<std::vector<T>> operator+(const std::vector<std::vector<T>>& A, cons
 
 
 /* Операция поэлементного вычитания матриц */
-template <typename T>
-std::vector<std::vector<T>> operator-(const std::vector<std::vector<T>>& A, const std::vector<std::vector<T>>& B){
-    // Проверка на совпадение размеров матриц
-    if (A.size() != B.size() || A[0].size() != B[0].size()) {
-        std::cout << "Error: size A != size B in substraction matrix." << std::endl;
-        exit(1);
+template<typename T>
+Matrix<T> operator-(Matrix<T>& A, Matrix<T>& B) {
+    if (A.data.size() != B.data.size() || A.data[0].size() != B.data[0].size()) {
+        throw std::invalid_argument("Matrix dimensions must match for addition");
     }
 
-    // Создание результирующей матрицы с теми же размерами
-    std::vector<std::vector<T>> result(A.size(), std::vector<T>(A[0].size(), 0));
+    Matrix<T> result(A.data.size(), A.data[0].size(), 0);
 
-    // Поэлементное сложение
-    for (size_t i = 0; i < A.size(); ++i) {
-        for (size_t j = 0; j < A[0].size(); ++j) {
-            result[i][j] = A[i][j] - B[i][j];
+    for (size_t i = 0; i < A.data.size(); ++i) {
+        for (size_t j = 0; j < A.data[i].size(); ++j) {
+            result.data[i][j] = A.data[i][j] - B.data[i][j];
         }
     }
+
     return result;
 }
 
 
-/* Операция умножения матрицы на вектор */
+/* Операция поэлементного вычитания сonst матриц */
 template <typename T>
-std::vector<T> operator*(const std::vector<std::vector<T>>& matrix, const std::vector<T>& vec) {
-    // Проверка на возможность умножения
-    if (matrix[0].size() != vec.size()) {
-        std::cout << "Error: size A != size b in multiply Matrix By Vector." << std::endl;
-        exit(1);
+Matrix<T> operator-(const Matrix<T>& A, const Matrix<T>& B) {
+    if (A.data.size() != B.data.size() || A.data[0].size() != B.data[0].size()) {
+        throw std::invalid_argument("Matrix dimensions must match for addition");
     }
-    // Создание результирующего вектора
-    std::vector<T> result(matrix.size(), 0);
 
-    // Умножение матрицы на вектор
-    for (int i = 0; i < matrix.size(); ++i) {
-        for (size_t j = 0; j < matrix[0].size(); ++j) {
-            result[i] += matrix[i][j] * vec[j];
+    Matrix<T> result(A.data.size(), A.data[0].size(), 0);
+
+    for (size_t i = 0; i < A.data.size(); ++i) {
+        for (size_t j = 0; j < A.data[i].size(); ++j) {
+            result.data[i][j] = A.data[i][j] - B.data[i][j];
         }
     }
+
+    return result;
+}
+
+
+
+/* Матричное умножение */
+template<typename T>
+Matrix<T> operator*(Matrix<T>& A, Matrix<T>& B) {
+    if (A.data[0].size() != B.data.size()) {
+        throw std::invalid_argument("Matrix dimensions must match for multiplication");
+    }
+
+    Matrix<T> result(A.data.size(), B.data[0].size(), 0);
+
+    for (size_t i = 0; i < A.data.size(); ++i) {
+        for (size_t j = 0; j < B.data[0].size(); ++j) {
+            for (size_t k = 0; k < A.data[0].size(); ++k) {
+                result.data[i][j] += A.data[i][k] * B.data[k][j];
+            }
+        }
+    }
+
     return result;
 }
 
 
 /* Матричное умножение */
 template <typename T>
-std::vector<std::vector<T>> operator*(const std::vector<std::vector<T>>& A, const std::vector<std::vector<T>>& B){
-    int m = A.size();    // Количество строк в матрице A
-    int n = A[0].size(); // Количество столбцов в матрице A
-    int p = B[0].size(); // Количество столбцов в матрице B
-
-    if (n != B.size()) {
-        std::cout << "Error: impossible multiply matrix" << std::endl;
-        exit(1);
+Matrix<T> operator*(const Matrix<T>& A, const Matrix<T>& B) {
+    if (A.data[0].size() != B.data.size()) {
+        throw std::invalid_argument("Matrix dimensions must match for multiplication");
     }
 
-    std::vector<std::vector<T>> result(m, std::vector<T>(p, 0.0));
+    Matrix<T> result(A.data.size(), B.data[0].size(), 0);
 
-    for (int i = 0; i < m; i++) {
-        for (int j = 0; j < p; j++) {
-            for (int k = 0; k < n; k++) {
-                result[i][j] += A[i][k] * B[k][j];
+    for (size_t i = 0; i < A.data.size(); ++i) {
+        for (size_t j = 0; j < B.data[0].size(); ++j) {
+            for (size_t k = 0; k < A.data[0].size(); ++k) {
+                result.data[i][j] += A.data[i][k] * B.data[k][j];
             }
         }
     }
+
     return result;
 }
 
 
+/* Операция для умножения матрицы на число */
+template <typename T>
+Matrix<T> operator*(const Matrix<T>& A, const T& scalar){
+    // Создание результирующей матрицы с теми же размерами
+    Matrix<T> result(A.size(), Vector<T>(A[0].size(), 0));
+
+    // Умножение каждого элемента матрицы на число
+    for (size_t i = 0; i < A.size(); ++i) {
+        for (size_t j = 0; j < A[0].size(); ++j) {
+            result[i][j] = A[i][j] * scalar;
+        }
+    }
+
+    return result;
+}
+
+
+/* Операция для умножения  числа на матрицу */
+template <typename T>
+Matrix<T> operator*(const T& scalar, const Matrix<T>& A){
+    // Создание результирующей матрицы с теми же размерами
+    Matrix<T> result(A.size(), Vector<T>(A[0].size(), 0));
+
+    // Умножение каждого элемента матрицы на число
+    for (size_t i = 0; i < A.size(); ++i) {
+        for (size_t j = 0; j < A[0].size(); ++j) {
+            result[i][j] = A[i][j] * scalar;
+        }
+    }
+
+    return result;
+}
+
+
+
+
+
+
+
+
+/* Операция умножения матрицы на вектор */
+template<typename T>
+std::vector<T> operator*(const Matrix<T>& matrix, const Vector<T>& vec) {
+    if (matrix.data[0].size() != vec.size()) {
+        throw std::invalid_argument("Matrix and vector dimensions must match for multiplication");
+    }
+
+    Vector<T> result(matrix.data.size(), 0);
+
+    for (size_t i = 0; i < matrix.data.size(); ++i) {
+        for (size_t j = 0; j < matrix.data[0].size(); ++j) {
+            result[i] += matrix.data[i][j] * vec[j];
+        }
+    }
+
+    return result;
+}
+
+
+
 // Определение оператора отрицания для матрицы
 template <typename T>
-std::vector<std::vector<T>> operator-(const std::vector<std::vector<T>>& matrix) {
+Matrix<T> operator-(const Matrix<T>& matrix) {
     int rows = matrix.size();
     int cols = matrix[0].size();
     std::vector<std::vector<T>> result(rows, std::vector<T>(cols, 0));
@@ -153,6 +228,26 @@ std::vector<std::vector<T>> operator-(const std::vector<std::vector<T>>& matrix)
     }
     return result;
 }
+
+
+/* Реализация оператора потока вывода для const матрицы */
+template <typename T>
+std::ostream& operator<<(std::ostream& os, const Matrix<T>& matrix) {
+    for (const auto& row : matrix.data) {
+        os << row << std::endl;
+    }
+    return os;
+}
+
+
+
+
+
+
+/* ### ФУНКЦИИ ДРУГИХ ОПЕРАЦИЙ С МАТРИЦАМИ ### */
+
+
+
 
 
 /* Функция для поэлементного умножения матриц */
@@ -180,13 +275,13 @@ std::vector<std::vector<T>> Multyply(const std::vector<std::vector<T>>& A, const
 
 /* Функция округления чисел в матрицах */
 template <typename T>
-std::vector<std::vector<T>> Matrix_round(const std::vector<std::vector<T>>& A, const double& eps){
-    std::vector<std::vector<T>> roundA = A;
-    int size = A.size();
+Matrix<T> Matrix<T>::round(const double& eps){
+    Matrix<T> roundA(data);
+    int size = data.size();
 
     for (int i = 0; i < size; ++i) {
         for (int j = 0; j < size; ++j) {
-            roundA[i][j] = (round(A[i][j]) >= 0)? round(abs(A[i][j]) * (1 / eps)) / (1 / eps): -1 * round(abs(A[i][j]) * (1 / eps)) / (1 / eps);
+            roundA[i][j] = (round(data[i][j]) >= 0)? round(abs(data[i][j]) * (1 / eps)) / (1 / eps): -1 * round(abs(data[i][j]) * (1 / eps)) / (1 / eps);
         }
     }
     return roundA;
@@ -195,15 +290,15 @@ std::vector<std::vector<T>> Matrix_round(const std::vector<std::vector<T>>& A, c
 
 /* Функция для вычисления нормы матрицы */
 template <typename T>
-T norm(const std::vector<std::vector<T>>& matrix, const int& p) {
+T Matrix<T>::norm(const int& p) {
     // Проверка на пустую матрицу
-    if (matrix.empty() || matrix[0].empty()) {
+    if (data.empty() || data[0].empty()) {
         std::cout << "Error: Empty matrix in norm()\n" << std::endl;
         exit(1);
     }
 
-    int rows = matrix.size();
-    int cols = matrix[0].size();
+    int rows = data.size();
+    int cols = data[0].size();
 
     T result = 0.0;
 
@@ -213,7 +308,7 @@ T norm(const std::vector<std::vector<T>>& matrix, const int& p) {
         for (int i = 0; i < rows; ++i) {
             T rowSum = 0.0;
             for (int j = 0; j < cols; ++j) {
-                rowSum += abs(matrix[i][j]);
+                rowSum += abs(data[i][j]);
             }
             if (rowSum > result) {
                 result = rowSum;
@@ -224,7 +319,7 @@ T norm(const std::vector<std::vector<T>>& matrix, const int& p) {
         for (int j = 0; j < cols; ++j) {
             T colSum = 0.0;
             for (T i = 0; i < rows; ++i) {
-                colSum += pow(abs(matrix[i][j]), p);
+                colSum += pow(abs(data[i][j]), p);
             }
             result += pow(colSum, 1.0 / p);
         }
@@ -239,7 +334,7 @@ T norm(const std::vector<std::vector<T>>& matrix, const int& p) {
 template <typename T>
 std::vector<std::vector<T>> RotateRight(const std::vector<std::vector<T>>& A){
 
-    std::vector<std::vector<T>> A_rotate(A.size(), std::vector<T>(A.size(), 0));
+    Matrix<T> A_rotate(A.size(), Vector<T>(A.size(), 0));
 
     for (int i = 0; i < A.size(); ++i) {
         for (int j = 0; j < A.size(); ++j) {
@@ -256,7 +351,7 @@ std::vector<std::vector<T>> RotateRight(const std::vector<std::vector<T>>& A){
 template <typename T>
 std::vector<std::vector<T>> RotateLeft(const std::vector<std::vector<T>>& A){
 
-    std::vector<std::vector<T>> A_rotate(A.size(), std::vector<T>(A.size(), 0));
+    Matrix<T> A_rotate(A.size(), Vector<T>(A.size(), 0));
 
     for (int i = 0; i < A.size(); ++i) {
         for (int j = 0; j < A.size(); ++j) {
@@ -270,8 +365,8 @@ std::vector<std::vector<T>> RotateLeft(const std::vector<std::vector<T>>& A){
 
 // Функция для создания единичной матрицы размера n x n
 template <typename T>
-std::vector<std::vector<T>> create_identity_matrix(const int& n) {
-    std::vector<std::vector<T>> identity(n, std::vector<T>(n, 0));
+Matrix<T> Matrix<T>::create_identity_matrix(const int& n) {
+    Matrix<T> identity(n, Vector<T>(n, 0));
     for (int i = 0; i < n; i++) {
         identity[i][i] = 1;
     }
@@ -280,75 +375,32 @@ std::vector<std::vector<T>> create_identity_matrix(const int& n) {
 
 
 // Функция для обратной матрицы с проверкой на вырожденность
-template <typename T>
-std::vector<std::vector<T>> inverseMatrix(const std::vector<std::vector<T>>& A, const T& eps) {
-    std::vector<std::vector<T>> E = create_identity_matrix<T>(A.size());
-    std::vector<std::vector<T>> E_rotate = RotateLeft(E);
-    std::vector<T> e(A.size());
-    std::vector<std::vector<T>> X(A.size(), std::vector<T>(A.size(), 0));
-
-
-    for (int i = 0; i < A.size(); i++){
-        e = E_rotate[i];
-        X[i] = method_Gaussa(A, e, eps);
-
-    }
-    std::vector<std::vector<T>> A_inv = RotateLeft(X);
-    return A_inv;
-}
+//template <typename T>
+//std::vector<std::vector<T>> inverseMatrix(const std::vector<std::vector<T>>& A, const T& eps) {
+//    std::vector<std::vector<T>> E = create_identity_matrix<T>(A.size());
+//    std::vector<std::vector<T>> E_rotate = RotateLeft(E);
+//    std::vector<T> e(A.size());
+//    std::vector<std::vector<T>> X(A.size(), std::vector<T>(A.size(), 0));
+//
+//
+//    for (int i = 0; i < A.size(); i++){
+//        e = E_rotate[i];
+//        X[i] = method_Gaussa(A, e, eps);
+//
+//    }
+//    std::vector<std::vector<T>> A_inv = RotateLeft(X);
+//    return A_inv;
+//}
 
 
 // Функция для обратной матрицы с проверкой на вырожденность с максимальной точностью
-template <typename T>
-std::vector<std::vector<T>> inverseMatrix(const std::vector<std::vector<T>>& A){
-    T eps = std::numeric_limits<T>::epsilon();
-    return inverseMatrix(A, eps);
-}
+//template <typename T>
+//std::vector<std::vector<T>> inverseMatrix(const std::vector<std::vector<T>>& A){
+//    T eps = std::numeric_limits<T>::epsilon();
+//    return inverseMatrix(A, eps);
+//}
 
 
-/* Функция для вычисления числа обусловленности матрицы c нормой 1*/
-template <typename T>
-T cond_1(const std::vector<std::vector<T>>& matrix){
-    T n_1 = norm_1(matrix);
-    if (n_1 == 0) {
-        printf("Error: Det(A) = 0  =>  cond_1(A) = oo");
-        return std::numeric_limits<T>::infinity();
-    }
-    std::vector<std::vector<T>> inverse_matrix = inverseMatrix(matrix);
-    T n_2 = norm_1(inverse_matrix);
-    T cond = n_1 * n_2;
-    return cond;
-}
-
-
-/* Функция для вычисления числа обусловленности матрицы c нормой 2*/
-template <typename T>
-T cond_2(const std::vector<std::vector<T>>& matrix){
-    T n_1 = norm_2(matrix);
-    if (n_1 == 0) {
-        std::cout << "Error: Det(A) = 0  =>  cond_2(A) = oo" << std::endl;
-        return std::numeric_limits<T>::infinity();
-    }
-    std::vector<std::vector<T>> inverse_matrix = inverseMatrix(matrix);
-    T n_2 = norm_2(inverse_matrix);
-    T cond = n_1 * n_2;
-    return cond;
-}
-
-
-/* Функция для вычисления числа обусловленности матрицы с нормой oo*/
-template <typename T>
-T cond_oo(const std::vector<std::vector<T>>& matrix){
-    T n_1 = norm_oo(matrix);
-    if (n_1 == 0) {
-        printf("Error: Det(A) = 0  =>  cond_oo(A) = oo");
-        return std::numeric_limits<T>::infinity();
-    }
-    std::vector<std::vector<T>> inverse_matrix = inverseMatrix(matrix);
-    T n_2 = norm_oo(inverse_matrix);
-    T cond = n_1 * n_2;
-    return cond;
-}
 
 /* Функция транспонирования матрицы */
 template <typename T>
@@ -380,29 +432,4 @@ std::vector<std::vector<T>> crop_matrix(const std::vector<std::vector<T>>& A, co
     }
 
     return A_crop;
-}
-
-/* Функция, вычисляющая определитель матрицы 4х4 */
-template <typename T>
-double det(const std::vector<std::vector<T>>& matrix) {
-    return
-            matrix[0][0] * (
-                    matrix[1][1] * (matrix[2][2] * matrix[3][3] - matrix[2][3] * matrix[3][2]) -
-                    matrix[1][2] * (matrix[2][1] * matrix[3][3] - matrix[2][3] * matrix[3][1]) +
-                    matrix[1][3] * (matrix[2][1] * matrix[3][2] - matrix[2][2] * matrix[3][1])
-            ) -
-            matrix[0][1] * (
-                    matrix[1][0] * (matrix[2][2] * matrix[3][3] - matrix[2][3] * matrix[3][2]) -
-                    matrix[1][2] * (matrix[2][0] * matrix[3][3] - matrix[2][3] * matrix[3][0]) +
-                    matrix[1][3] * (matrix[2][0] * matrix[3][2] - matrix[2][2] * matrix[3][0])
-            ) +
-            matrix[0][2] * (
-                    matrix[1][0] * (matrix[2][1] * matrix[3][3] - matrix[2][3] * matrix[3][1]) -
-                    matrix[1][1] * (matrix[2][0] * matrix[3][3] - matrix[2][3] * matrix[3][0]) +
-                    matrix[1][3] * (matrix[2][0] * matrix[3][1] - matrix[2][1] * matrix[3][0])
-            ) -
-            matrix[0][3] * (
-                    matrix[1][0] * (matrix[2][1] * matrix[3][2] - matrix[2][2] * matrix[3][1]) -
-                    matrix[1][1] * (matrix[2][0] * matrix[3][2] - matrix[2][2] * matrix[3][0]) +
-                    matrix[1][2] * (matrix[2][0] * matrix[3][1] - matrix[2][1] * matrix[3][0]));
 }
