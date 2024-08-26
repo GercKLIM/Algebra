@@ -1,6 +1,9 @@
 #include <iostream>
+
+
+/* ### ВЫЗОВ БИБЛИОТЕКИ АЛГЕБРЫ ### */
 #include "Lib/algebra.h"
-//#include "Lib/vectors/TEST_vectors.cpp"
+
 
 int main() {
 

@@ -20,12 +20,15 @@ add_executable(My_CPP_Libs
         Lib/SLAE/SLAE.tpp
         Lib/maths/maths.h
         Lib/maths/maths.tpp
-        Lib/vectors/test_vectors.cpp
-        Lib/SLAE/test_SLAE.cpp
-        Lib/matrixes/test_matrixes.cpp
-        Lib/maths/test_maths.cpp
-        Lib/MathFiles/test_MathFiles.cpp
+
+        # Файлы тестов -> не включать!
+        #Lib/vectors/test_vectors.cpp
+        #Lib/SLAE/test_SLAE.cpp
+        #Lib/matrixes/test_matrixes.cpp
+        #Lib/maths/test_maths.cpp
+        #Lib/MathFiles/test_MathFiles.cpp
 )
+
 
 # ### ТЕСТЫ ###
 
@@ -40,39 +43,120 @@ FetchContent_MakeAvailable(googletest)
 enable_testing()
 
 
+
 ### Добавление тестов ###
 
 # Тесты Vectors
 add_executable(test_vectors
-        Lib/vectors/test_vectors.cpp
+        TESTS/test_vectors.cpp
+
+        # Файлы библиотеки
+        Lib/algebra.h
+        Lib/MathFiles/MathFiles.h
+        Lib/MathFiles/MathFiles.tpp
+        Lib/vectors/vectors.h
+        Lib/vectors/vectors.tpp
+        Lib/matrixes/matrixes.h
+        Lib/matrixes/matrixes.tpp
+        Lib/SLAE/SLAE.h
+        Lib/SLAE/SLAE.tpp
+        Lib/maths/maths.h
+        Lib/maths/maths.tpp
 )
 
 # Тесты Matrix
 add_executable(test_matrix
-        Lib/matrixes/test_matrixes.cpp
+        TESTS/test_matrixes.cpp
+
+        # Файлы библиотеки
+        Lib/algebra.h
+        Lib/MathFiles/MathFiles.h
+        Lib/MathFiles/MathFiles.tpp
+        Lib/vectors/vectors.h
+        Lib/vectors/vectors.tpp
+        Lib/matrixes/matrixes.h
+        Lib/matrixes/matrixes.tpp
+        Lib/SLAE/SLAE.h
+        Lib/SLAE/SLAE.tpp
+        Lib/maths/maths.h
+        Lib/maths/maths.tpp
 )
 
 # Тесты SLAE
 add_executable(test_SLAE
-        Lib/SLAE/test_SLAE.cpp
+        TESTS/test_SLAE.cpp
+
+        # Файлы библиотеки
+        Lib/algebra.h
+        Lib/MathFiles/MathFiles.h
+        Lib/MathFiles/MathFiles.tpp
+        Lib/vectors/vectors.h
+        Lib/vectors/vectors.tpp
+        Lib/matrixes/matrixes.h
+        Lib/matrixes/matrixes.tpp
+        Lib/SLAE/SLAE.h
+        Lib/SLAE/SLAE.tpp
+        Lib/maths/maths.h
+        Lib/maths/maths.tpp
 )
 
 # Тесты Maths
 add_executable(test_maths
-        Lib/maths/test_maths.cpp
+        TESTS/test_maths.cpp
+
+        # Файлы библиотеки
+        Lib/algebra.h
+        Lib/MathFiles/MathFiles.h
+        Lib/MathFiles/MathFiles.tpp
+        Lib/vectors/vectors.h
+        Lib/vectors/vectors.tpp
+        Lib/matrixes/matrixes.h
+        Lib/matrixes/matrixes.tpp
+        Lib/SLAE/SLAE.h
+        Lib/SLAE/SLAE.tpp
+        Lib/maths/maths.h
+        Lib/maths/maths.tpp
 )
 
 # Тесты MathFiles
 add_executable(test_MathFiles
-        Lib/MathFiles/test_MathFiles.cpp
+        TESTS/test_MathFiles.cpp
+
+        # Файлы библиотеки
+        Lib/algebra.h
+        Lib/MathFiles/MathFiles.h
+        Lib/MathFiles/MathFiles.tpp
+        Lib/vectors/vectors.h
+        Lib/vectors/vectors.tpp
+        Lib/matrixes/matrixes.h
+        Lib/matrixes/matrixes.tpp
+        Lib/SLAE/SLAE.h
+        Lib/SLAE/SLAE.tpp
+        Lib/maths/maths.h
+        Lib/maths/maths.tpp
 )
 
+
+# Конфигурация запуска всех тестов
 add_executable(test_ALL
-        Lib/vectors/test_vectors.cpp
-        Lib/matrixes/test_matrixes.cpp
-        Lib/SLAE/test_SLAE.cpp
-        Lib/maths/test_maths.cpp
-        Lib/MathFiles/test_MathFiles.cpp
+        TESTS/test_vectors.cpp
+        TESTS/test_matrixes.cpp
+        TESTS/test_SLAE.cpp
+        TESTS/test_maths.cpp
+        TESTS/test_MathFiles.cpp
+
+        # Файлы библиотеки
+        Lib/algebra.h
+        Lib/MathFiles/MathFiles.h
+        Lib/MathFiles/MathFiles.tpp
+        Lib/vectors/vectors.h
+        Lib/vectors/vectors.tpp
+        Lib/matrixes/matrixes.h
+        Lib/matrixes/matrixes.tpp
+        Lib/SLAE/SLAE.h
+        Lib/SLAE/SLAE.tpp
+        Lib/maths/maths.h
+        Lib/maths/maths.tpp
 )
 
 

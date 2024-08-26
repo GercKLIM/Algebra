@@ -152,7 +152,7 @@ Vector<T> operator*(const T& c, Vector<T>& vec){
 
 /* Операция деления вектора на число */
 template <typename T>
-Vector<T> operator/(T& c, Vector<T>& vec){
+Vector<T> operator/(Vector<T>& vec, T& c){
     Vector<T> result(vec.size(), 0);
     for (int i = 0; i < vec.size(); i++){
         result[i] = vec[i] / c;
@@ -161,9 +161,9 @@ Vector<T> operator/(T& c, Vector<T>& vec){
 }
 
 
-/* Операция деления вектора на число */
+/* Операция деления сonst вектора на const число */
 template <typename T>
-Vector<T> operator/(const T& c, const Vector<T>& vec){
+Vector<T> operator/(const Vector<T>& vec, const T& c){
     Vector<T> result(vec.size(), 0);
     for (int i = 0; i < vec.size(); i++){
         result[i] = vec[i] / c;
@@ -172,9 +172,9 @@ Vector<T> operator/(const T& c, const Vector<T>& vec){
 }
 
 
-/* Операция деления вектора на число */
+/* Операция деления вектора на const число */
 template <typename T>
-Vector<T> operator/(const T& c, Vector<T>& vec){
+Vector<T> operator/(Vector<T>& vec, const T& c){
     Vector<T> result(vec.size(), 0);
     for (int i = 0; i < vec.size(); i++){
         result[i] = vec[i] / c;
@@ -183,9 +183,9 @@ Vector<T> operator/(const T& c, Vector<T>& vec){
 }
 
 
-/* Операция деления вектора на число */
+/* Операция деления const вектора на число */
 template <typename T>
-Vector<T> operator/(T& c, const Vector<T>& vec){
+Vector<T> operator/(const Vector<T>& vec, T& c){
     Vector<T> result(vec.size(), 0);
     for (int i = 0; i < vec.size(); i++){
         result[i] = vec[i] / c;
@@ -298,7 +298,10 @@ void Vector<T>::print_vec(const int& n){
 
 /* ### ФУНКЦИИ ДРУГИХ ОПЕРАЦИЙ С ВЕКТОРАМИ ### */
 
-
+template <typename T>
+std::vector<T> Vector<T>::to_std(){
+    return data;
+}
 
 /* Функция для скалярного умножения векторов */
 template <typename T>
@@ -329,7 +332,7 @@ T Vector<T>::norm(const int& p){
     if (p == 0) {
         // Норма oo
         for (const auto& element : data) {
-            T absElement = abs(element);
+            T absElement = fabs(element);
             if (absElement > result) {
                 result = absElement;
             }
@@ -337,7 +340,7 @@ T Vector<T>::norm(const int& p){
     } else {
         // Общий случай для норм L1, L2 и т.д.
         for (const auto& element : data) {
-            result += pow(abs(element), p);
+            result += pow(fabs(element), p);
         }
 
         result = pow(result, 1.0 / p);

@@ -22,11 +22,13 @@ public:
 
 
 
-    /* Создание объекта по исходному std вектору */
-    Vector(std::vector<T> vec) : data(vec) {};
+    /* Создание объекта по исходному std::vector */
+    Vector(std::vector<T> vec) {
+        data = vec;
+    };
 
 
-    /* Создание объекта по исходному std вектору */
+    /* Создание объекта по исходному вектору */
     Vector(const Vector<T>& vec) {
         int size = vec.size();
         data.resize(size);
@@ -183,7 +185,8 @@ public:
 
     /* ### ФУНКЦИИ ДРУГИХ ОПЕРАЦИЙ С ВЕКТОРАМИ ### */
 
-
+    /* Функция преобразовывающая Vector -> std::vector*/
+    std::vector<T> to_std();
 
     /* Функция для скалярного умножения векторов */
     T dot(const Vector<T>& vec2);
