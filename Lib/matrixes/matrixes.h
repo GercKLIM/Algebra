@@ -24,6 +24,20 @@ public:
     /* Создание начального объекта */
     Matrix() : data(1, Vector<T>(1, 0)) {};
 
+    /* Конструктор с инициализатором списка */
+    Matrix(std::initializer_list<std::initializer_list<T>> initList) {
+        for (const auto& row : initList) {
+            data.emplace_back(row);
+        }
+    }
+
+    /* Создание объекта по исходной длине */
+    Matrix(int size) : data(size, Vector<T>(1, 0)) {};
+
+
+    /* Создание объекта по исходной размерности */
+    Matrix(int rows, int colls) : data(rows, Vector<T>(colls, 0)) {};
+
 
     /* Создание объекта по исходной размерности и значению */
     Matrix(int rows, int colls, T value) : data(rows, Vector<T>(colls, value)) {};
@@ -33,7 +47,7 @@ public:
     Matrix(std::vector<Vector<T>> matrix) {data = matrix;};
 
 
-    /* Создание объекта по исходному std::vector<std::vector<T>>*/
+    /* Создание объекта по исходному const std::vector<std::vector<T>> */
     Matrix(const std::vector<std::vector<T>>& matrix) {
         int rows = matrix.size();
         int cols = rows > 0 ? matrix[0].size() : 0;
@@ -43,7 +57,7 @@ public:
         }
     }
 
-
+    /* Создание объекта по исходному std::vector<std::vector<T>> */
     Matrix(std::vector<std::vector<T>>& matrix) {
         int rows = matrix.size();
         int cols = rows > 0 ? matrix[0].size() : 0;
@@ -54,23 +68,23 @@ public:
     }
 
 
-    /* Создание объекта по исходной длине и  std::vector<T>*/
-    Matrix(int size, std::vector<T> vec) {
-        data(size, Vector<T>(vec.size(), 0));
-        for (int i = 0; i < size; i++){
-            Vector<T> Vec(vec);
-            data[i] = Vec;
+    /* Создание объекта по исходной длине и std::vector<T>*/
+    Matrix(int size, const std::vector<T>& vec) {
+        data.resize(size);
+
+        for (int i = 0; i < size; ++i) {
+            data[i] = Vector<T>(vec);
         }
-    };
+    }
 
 
-    /* Создание объекта по исходной длине и Vector<T>*/
-    Matrix(int size, Vector<T> vec) {
-        data(size, Vector<T>(vec.size(), 0));
-        for (int i = 0; i < size; i++){
+    /* Создание объекта по исходной длине и Vector<T> */
+    Matrix(int size, const Vector<T>& vec) {
+        data.resize(size, Vector<T>(vec.size(), T(0)));
+        for (int i = 0; i < size; ++i) {
             data[i] = vec;
         }
-    };
+    }
 
 
     /* Возвращение значения размерности */
@@ -94,6 +108,9 @@ public:
         return data[index];
     }
 
+    /* Операция сравнения */
+    template<typename Y>
+    friend bool operator==(const Matrix<Y> A1, const Matrix<Y> A2);
 
     /* Операция поэлементного сложения матриц */
     template <typename Y>
@@ -125,10 +142,13 @@ public:
     friend Matrix<Y> operator*(const Matrix<Y>& A, const Matrix<Y>& B);
 
 
-    /* Функция для умножения матрицы на вектор */
-    template <typename Y>
-    friend Matrix<Y> operator*(Matrix<Y>& matrix, Matrix<Y>& vec);
+    /* Функция для умножения матрицы на вектор справа*/
+    template<typename Y>
+    friend Vector<Y> operator*(Vector<Y>& vec, Matrix<Y>& matrix);
 
+    /* Операция умножения матрицы на вектор слева */
+    template<typename Y>
+    friend Vector<Y> operator*(Vector<Y>& vec, Matrix<Y>& matrix);
 
     /* Функция для умножения const матрицы на const вектор */
     template <typename Y>
@@ -137,7 +157,7 @@ public:
 
     /* Определение оператора отрицания для матрицы */
     template <typename Y>
-    friend Matrix<Y> operator-(Matrix<Y>& matrix);
+    friend Matrix<Y> operator-(Matrix<Y>& A);
 
 
     /* Определение оператора отрицания для const матрицы */
@@ -145,9 +165,20 @@ public:
     friend Matrix<Y> operator-(const Matrix<Y>& matrix);
 
 
+    /* Операция для умножения матрицы на число слева*/
+    template <typename Y>
+    friend Matrix<Y> operator*(const Matrix<Y>& A, const Y& scalar);
+
+
+    /* Операция для умножения матрицы на число справа*/
+    template <typename Y>
+    friend Matrix<Y> operator*(const Y& scalar, const Matrix<Y>& A);
+
+
     /* Определение потока вывода для const матрицы */
     template <typename Y>
     friend std::ostream& operator<<(std::ostream& os, const Matrix<Y>& matrix);
+
 
     /* ### ФУНКЦИИ ВЫВОДА МАТРИЦ НА ЭКРАН ### */
 
@@ -162,6 +193,17 @@ public:
 
 
     /* ### ФУНКЦИИ ДРУГИХ ОПЕРАЦИЙ С МАТРИЦАМИ ### */
+
+
+
+    /* Функция преобразование матрицы в std::vector<Vector<T>> */
+    std::vector<Vector<T>> to_std();
+
+
+    /* Функция преобразование матрицы в std::vector<std::vector<T>> */
+    std::vector<std::vector<T>> to_stds();
+
+
 
     /* Функция для транспонирования матрицы */
     Matrix<T> transpose();
@@ -184,23 +226,23 @@ public:
 
 
     /* Функция поворота матрицы вправо */
-    Matrix<T> RotateRight();
+    Matrix<T> rotateRight();
 
 
     /* Функция поворота матрицы влево */
-    Matrix<T> RotateLeft();
+    Matrix<T> rotateLeft();
 
 
     /* Функция для обратной матрицы с проверкой на вырожденность c определенной точностью */
-    std::vector<std::vector<T>> inverseMatrix(const T& eps);
+    Matrix<T> inverse(const T& eps);
 
 
     /* Функция для обратной матрицы с проверкой на вырожденность */
-    std::vector<std::vector<T>> inverseMatrix();
+    Matrix<T> inverse();
 
 
     /* Функция обрезки матрицы снизу и справа */
-    std::vector<std::vector<T>> crop_matrix(const int& k);
+    Matrix<T> crop(const int& k);
 
 
 };

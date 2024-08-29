@@ -10,6 +10,22 @@
 /* ### ПЕРЕГРУЗКА ОПЕРАТОРОВ ДЛЯ std::vector<T> ### */
 
 
+template<typename Y>
+bool operator==(const Vector<Y>& v1, const Vector<Y>& v2) {
+    // Сначала сравниваем размеры
+    if (v1.size() != v2.size()) {
+        return false;
+    }
+
+    // Затем сравниваем элементы
+    for (int i = 0; i < v1.size(); i++){
+        if (v1[i] != v2[i]){
+            return false;
+        }
+    }
+    return true;
+}
+
 
 /* Операция сложения векторов */
 template<typename T>

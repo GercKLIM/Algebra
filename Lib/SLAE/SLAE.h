@@ -27,33 +27,61 @@ public:
         b_data(b);
     }
 
+    SLAE(std::vector<std::vector<T>> A, std::vector<T> b) {
+        A_data(A);
+        b_data(b);
+    }
+
+    SLAE(Matrix<T> A, std::vector<T> b) {
+        A_data(A);
+        b_data(b);
+    }
+
+    SLAE(std::vector<std::vector<T>> A, Vector<T> b) {
+        A_data(A);
+        b_data(b);
+    }
 
 
-    /* ### ОПЕРАЦИИ СЛАУ ### */
 
-
-
-    /* ### ДРУГИЕ ОПЕРАЦИИ СЛАУ ### */
+    /* ### ОПЕРАЦИИ СО СЛАУ ### */
 
 
 
     /* Функция для получения матрицы из СЛАУ */
-    Matrix<T> SLAU_to_matrix();
+    Matrix<T> to_matrix();
 
 
     /* Функция для получения векторая из СЛАУ */
-    Vector<T> SLAU_to_vec();
+    Vector<T> to_Vector();
 
 
-    /* Проверка решения СЛАУ через невязку */
-    template <typename Y>
-    friend T is_sol(const Vector<T> sol);
+    /* Функция для вычисления невязки найденного решения */
+    T residual();
+
+
+    /* Функция для вычисления невязки данного решения */
+    T residual(const Vector<T> sol);
+
+
+    /* Функция для проверки решения СЛАУ*/
+    bool is_sol(const Vector<T> sol);
+
+
+    /* Функция QR-разложение */
+    std::pair<Matrix<T>, Matrix<T>> QR;
+
+
+    /* Функция LU-разложение */
+    std::pair<Matrix<T>, Matrix<T>> LU;
+
 
 
 
     /* ### РЕШЕНИЕ СЛАУ ### */
 
-
+    /* Вывод вычисленного решения */
+    Vector<T> sol();
 
     /* Решение СЛАУ c автоматическим выбором метода */
     Vector<T> sol(T eps);
@@ -63,6 +91,9 @@ public:
 
     /* Решение СЛАУ методом QR-разложения */
     Vector<T> sol_QR(T eps);
+
+    /* Решение СЛАУ методом Крамера */
+    Vector<T> sol_Cramer(T eps);
 
 
 };

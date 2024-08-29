@@ -16,6 +16,7 @@
 #include <limits>
 #include <iomanip>
 #include <initializer_list>
+#include <algorithm>
 
 
 /* ВЫЗОВ РЕАЛИЗАЦИЙ */

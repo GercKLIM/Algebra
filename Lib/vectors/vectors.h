@@ -22,6 +22,10 @@ public:
 
 
 
+    /* Конструктор по умолчанию */
+    Vector() : data(1, 0){};
+
+
     /* Создание объекта по исходному std::vector */
     Vector(std::vector<T> vec) {
         data = vec;
@@ -40,10 +44,6 @@ public:
 
     /* Создание объекта по исходной длине и значению */
     Vector(int size, T value = T()) : data(size, value) {};
-
-
-    /* Создание начального объекта */
-    Vector() : data(1, 0){};
 
 
     /* Создание объекта по массиву */
@@ -72,9 +72,15 @@ public:
         return data[index];
     }
 
+
+    /* Операция сравнения */
+    template<typename Y>
+    friend bool operator==(const Vector<Y>& v1, const Vector<Y>& v2);
+
+
     /* Операция сложения векторов */
     template<typename Y>
-    friend Vector<T> operator+(Vector<T>& v1, Vector<T>& v2);
+    friend Vector<Y> operator+(Vector<Y>& v1, Vector<Y>& v2);
 
 
     /* Операция cложения const векторов */
