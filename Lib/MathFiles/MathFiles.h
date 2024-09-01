@@ -5,7 +5,7 @@
  * */
 
 #pragma once
-#include "../algebra.h"
+#include "../Algebra.h"
 
 
 /* ### ФУНКЦИИ ИМПОРТА ### */

@@ -25,13 +25,16 @@
 #include "MathFiles/MathFiles.h"
 
 /* Функции алгебры векторов */
-#include "vectors/vectors.h"
+#include "Vectors/Vector.h"
 
 /* Функции алгебры матриц */
-#include "matrixes/matrixes.h"
+#include "Matrix/Matrix.h"
 
 /* Функции алгебры СЛАУ */
 #include "SLAE/SLAE.h"
 
+/* Функции алгебры уравнений (простых) */
+#include "Equation/Equation.h"
+
 /* Некоторые другие функции математики */
-#include "maths/maths.h"
+#include "Math/Math.h"

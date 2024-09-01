@@ -4,7 +4,7 @@
  * */
 
 #pragma once
-#include "../algebra.h"
+#include "../Algebra.h"
 
 
 
@@ -91,6 +91,31 @@ public:
     int size() const {
         return data.size();
     }
+
+
+    /* Возвращение значения количества строк */
+    int rows() const {
+        return data.size();
+    }
+
+
+    /* Возвращение значения количества столбцов */
+    int cols() const {
+        return data[0].size();
+    }
+
+
+    /* Возвращение столбца */
+    Vector<T> col(const int& i) const {
+
+        Vector<T> coll(data.size(), 0);
+        for (int j = 0; j < data.size(); j++){
+            coll[j] = data[i];
+        }
+        return coll;
+    }
+
+
 
 
 
@@ -245,9 +270,10 @@ public:
     Matrix<T> crop(const int& k);
 
 
+    T det() const;
 };
 
 
 
 /* ### ВЫЗОВ РЕАЛИЗАЦИИ ### */
-#include "matrixes.tpp"
+#include "Matrix.tpp"

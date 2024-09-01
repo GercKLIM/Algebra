@@ -4,7 +4,7 @@
  * */
 
 #pragma once
-#include "../algebra.h"
+#include "../Algebra.h"
 
 
 
@@ -198,6 +198,11 @@ public:
     T dot(const Vector<T>& vec2);
 
 
+    /* Функция для скалярного умножения векторов */
+    template<typename Y>
+    friend Y dot(const Vector<Y>& vec1, const Vector<Y>& vec2);
+
+
     /* Функция для нормы вектора */
     T norm(const int& p);
 
@@ -231,5 +236,5 @@ public:
 
 
 /* ### ВЫЗОВ РЕАЛИЗАЦИИ ### */
-#include "vectors.tpp"
+#include "Vector.tpp"
 

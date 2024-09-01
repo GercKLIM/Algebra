@@ -5,7 +5,7 @@
  * */
 
 
-#include "../algebra.h"
+#include "../Algebra.h"
 
 
 /* ### ФУНКЦИИ ИМПОРТА ### */

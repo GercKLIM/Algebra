@@ -2,7 +2,7 @@
 
 
 /* ### ВЫЗОВ БИБЛИОТЕКИ АЛГЕБРЫ ### */
-#include "Lib/algebra.h"
+#include "Lib/Algebra.h"
 
 
 int main() {

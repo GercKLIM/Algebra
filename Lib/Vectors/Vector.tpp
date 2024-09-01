@@ -3,7 +3,7 @@
  *
  * */
 
-#include "../algebra.h"
+#include "../Algebra.h"
 
 
 
@@ -329,6 +329,21 @@ T Vector<T>::dot(const Vector<T>& vec2){
     T result;
     for (int i = 0; i < vec2.size(); i++){
         result += data[i] * vec2[i];
+    }
+    return result;
+}
+
+
+/* Функция для скалярного умножения векторов */
+template<typename T>
+T dot(const Vector<T>& vec1, const Vector<T>& vec2){
+    if (vec1.size() != vec2.size()) {
+        std::cout << "Error: vector1 size != vector2 size in dot." << std::endl;
+        exit(1);
+    }
+    T result;
+    for (int i = 0; i < vec2.size(); i++){
+        result += vec1[i] * vec2[i];
     }
     return result;
 }

@@ -3,7 +3,7 @@
  *
  * */
 
-#include "../algebra.h"
+#include "../Algebra.h"
 
 
 
@@ -645,4 +645,46 @@ Matrix<T> Matrix<T>::crop(const int& new_size){
     }
 
     return data_crop;
+}
+
+
+template<typename T>
+T Matrix<T>::det() const {
+    int n = rows();
+    if (n != cols()) {
+        throw std::invalid_argument("Matrix must be square to compute determinant.");
+    }
+
+    // Детераминант для матрицы 2x2
+    if (n == 2) {
+        return data[0][0] * data[1][1] - data[0][1] * data[1][0];
+    }
+
+    // Детераминант для матрицы 3x3
+    if (n == 3) {
+        return data[0][0] * (data[1][1] * data[2][2] - data[1][2] * data[2][1]) -
+               data[0][1] * (data[1][0] * data[2][2] - data[1][2] * data[2][0]) +
+               data[0][2] * (data[1][0] * data[2][1] - data[1][1] * data[2][0]);
+    }
+
+    // Для матриц размером больше 3x3 используем рекурсивный подход
+    T det = 0;
+    Matrix<T> minor(n - 1, n - 1);
+
+    for (int i = 0; i < n; ++i) {
+        // Создаем минор матрицы
+        for (int j = 1; j < n; ++j) {
+            int colIndex = 0;
+            for (int k = 0; k < n; ++k) {
+                if (k == i) continue;
+                minor(j - 1, colIndex) = data[j][k];
+                ++colIndex;
+            }
+        }
+
+        // Вычисляем детерминант с учетом знака
+        det += (i % 2 == 0 ? 1 : -1) * data[0][i] * minor.det();
+    }
+
+    return det;
 }
