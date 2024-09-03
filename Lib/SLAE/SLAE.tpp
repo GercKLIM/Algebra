@@ -11,29 +11,15 @@
 
 /* Функция для получения матрицы из СЛАУ */
 template <typename T>
-Matrix<T> SLAE<T>::to_Matrix(){
-    std::vector<std::vector<T>> matrix;
-    matrix.resize(A_data.size(), std::vector<T>(A_data.size()));
-
-    for (int i = 0; i < A_data.size(); i++) {
-        for (int j = 0; j < A_data.size(); j++) {
-            matrix[i][j] = A_data[i][j];
-        }
-    }
-    return matrix;
+Matrix<T> SLAE<T>::to_Matrix() const{
+    return A_data;
 }
 
 
 /* Функция для получения вектора из СЛАУ */
 template <typename T>
-Vector<T> SLAE<T>::to_Vector(){
-    int s = A_data.size();
-    std::vector<T> vec(s);
-
-    for (int i = 0; i < A_data.size(); i++) {
-        vec[i] = A_data[i][s];
-    }
-    return vec;
+Vector<T> SLAE<T>::to_Vector() const{
+    return b_data;
 }
 
 
@@ -68,20 +54,20 @@ Vector<T> SLAE<T>::residual(const Vector<T> sol){
 }
 
 
-//template<typename T>
-//T SLAE<T>::residual(const Vector<T> sol, const int& norm_type){
-//    int n = A_data.size();
-//    Vector<T> residual(n, 0);
-//
-//
-//    for (int i = 0; i < n; i++) {
-//        for (int j = 0; j < n; j++) {
-//            residual[i] += A_data[i][j] * sol[j];
-//        }
-//        residual[i] = b_data[i] - residual[i];
-//    }
-//    return residual.norm(norm_type);
-//}
+template<typename T>
+T SLAE<T>::residual(const Vector<T> sol, const int& norm_type){
+    int n = A_data.size();
+    Vector<T> residual(n, 0);
+
+
+    for (int i = 0; i < n; i++) {
+        for (int j = 0; j < n; j++) {
+            residual[i] += A_data[i][j] * sol[j];
+        }
+        residual[i] = b_data[i] - residual[i];
+    }
+    return residual.norm(norm_type);
+}
 
 
 /* Функция для проверки решения СЛАУ*/
@@ -277,7 +263,6 @@ void SLAE<T>::forward_Gauss(const T& eps) {
 }
 
 
-/* Функция обратного хода метода Гаусса */
 template<typename T>
 Vector<T> SLAE<T>::back_Gauss() {
     int n = A_data.rows();
@@ -288,10 +273,12 @@ Vector<T> SLAE<T>::back_Gauss() {
         for (int j = i + 1; j < n; ++j) {
             x[i] -= A_data(i, j) * x[j];
         }
+        x[i] /= A_data(i, i);  // Деление на диагональный элемент
     }
 
     return x;
 }
+
 
 
 
@@ -358,14 +345,14 @@ Vector<T> SLAE<T>::solve_Gauss(T eps) {
 /* Решение СЛАУ методом Гаусса (вариант 2)*/
 template<typename T>
 Vector<T> SLAE<T>::solve_Gauss_2(T eps) {
-    Matrix<T> A = A_data;  // Копия матрицы коэффициентов
-    Vector<T> b = b_data;  // Копия вектора правой части
+
+    SLAE<T> slae = *this;
 
     // Прямой ход
-    forward_Gauss(A, b, eps);
+    slae.forward_Gauss(eps);
 
     // Обратный ход
-    return back_Gauss(A, b);
+    return slae.back_Gauss();
 }
 
 

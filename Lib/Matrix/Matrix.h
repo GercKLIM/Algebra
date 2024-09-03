@@ -133,6 +133,17 @@ public:
         return data[index];
     }
 
+
+    /* Оператор индексации для константного объекта */
+    const T& operator()(int i, int j) const {
+        return data[i][j];
+    }
+
+    /* Оператор индексации для неконстантного объекта */
+    T& operator()(int i, int j) {
+        return data[i][j];
+    }
+
     /* Операция сравнения */
     template<typename Y>
     friend bool operator==(const Matrix<Y> A1, const Matrix<Y> A2);

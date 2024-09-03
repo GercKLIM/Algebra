@@ -23,26 +23,26 @@ public:
 
 
     SLAE(Matrix<T> A, Vector<T> b) {
-        A_data(A);
-        b_data(b);
+        A_data = A;
+        b_data = b;
     }
 
 
     SLAE(std::vector<std::vector<T>> A, std::vector<T> b) {
-        A_data(A);
-        b_data(b);
+        A_data = A;
+        b_data = b;
     }
 
 
     SLAE(Matrix<T> A, std::vector<T> b) {
-        A_data(A);
-        b_data(b);
+        A_data = A;
+        b_data = b;
     }
 
 
     SLAE(std::vector<std::vector<T>> A, Vector<T> b) {
-        A_data(A);
-        b_data(b);
+        A_data = A;
+        b_data = b;
     }
 
 
@@ -52,11 +52,11 @@ public:
 
 
     /* Функция для получения матрицы из СЛАУ */
-    Matrix<T> to_Matrix();
+    Matrix<T> to_Matrix() const;
 
 
     /* Функция для получения векторая из СЛАУ */
-    Vector<T> to_Vector();
+    Vector<T> to_Vector() const;
 
 
 
@@ -69,7 +69,7 @@ public:
 
 
     /* Функция размерности СЛАУ */
-    int size() {
+    int size(){
         return A_data.size();
     }
 

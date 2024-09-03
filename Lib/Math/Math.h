@@ -1,10 +1,30 @@
 /*
- *  ОБЪЯВЛЕНИЕ ДРУГИХ ФУНКЦИЙ АЛГЕБРЫ
+ *  ОБЪЯВЛЕНИЕ ДРУГИХ ФУНКЦИЙ АЛГЕБРЫ (в разработке)
  *
  * */
 
 #pragma once
 #include "../Algebra.h"
+
+
+
+
+/* Переопределение потока вывода для vector  */
+template<typename T>
+std::ostream& operator<<(std::ostream& os, const std::vector<T>& vec) {
+    //os << "[";
+    for (int i = 0; i < vec.size(); ++i) {
+        os << std::setprecision(16) << vec[i];
+        if (i != vec.size() - 1) {
+            os << " ";
+            //os << ", ";
+        }
+    }
+    //os << "]";
+    os << " ";
+    return os;
+}
+
 
 
 /* ### ФУНКЦИИ ВЫЧИСЛЕНИЯ ПРОЗВОДНЫХ ### */
@@ -22,7 +42,6 @@
 
 
 /* ### ФУНКЦИИ РЕШЕНИЯ НЕЛИНЕЙНЫХ УРАВНЕНИЙ ### */
-
 
 
 /* ### ВЫЗОВ РЕАЛИЗАЦИИ ### */

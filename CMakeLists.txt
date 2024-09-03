@@ -6,14 +6,14 @@ set(CMAKE_CXX_STANDARD 17)
 #set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 # Основная цель
-add_executable(My_CPP_Libs
+add_executable(Main
         main.cpp
         # Включите другие исходные файлы по мере необходимости
         Lib/Algebra.h
         Lib/MathFiles/MathFiles.h
         Lib/MathFiles/MathFiles.tpp
-        Lib/Vectors/Vector.h
-        Lib/Vectors/Vector.tpp
+        Lib/Vector/Vector.h
+        Lib/Vector/Vector.tpp
         Lib/Matrix/Matrix.h
         Lib/Matrix/Matrix.tpp
         Lib/SLAE/SLAE.h
@@ -25,7 +25,7 @@ add_executable(My_CPP_Libs
         Lib/Equation/Equation.tpp
 
         # Файлы тестов -> не включать!
-        #Lib/Vectors/test_vectors.cpp
+        #Lib/Vector/test_vectors.cpp
         #Lib/SLAE/test_SLAE.cpp
         #Lib/Matrix/test_matrixes.cpp
         #Lib/Math/test_maths.cpp
@@ -49,7 +49,7 @@ enable_testing()
 
 ### Добавление тестов ###
 
-# Тесты Vectors
+# Тесты Vector
 add_executable(test_Vector
         TESTS/test_Vector.cpp
 
@@ -57,8 +57,8 @@ add_executable(test_Vector
         Lib/Algebra.h
         Lib/MathFiles/MathFiles.h
         Lib/MathFiles/MathFiles.tpp
-        Lib/Vectors/Vector.h
-        Lib/Vectors/Vector.tpp
+        Lib/Vector/Vector.h
+        Lib/Vector/Vector.tpp
         Lib/Matrix/Matrix.h
         Lib/Matrix/Matrix.tpp
         Lib/SLAE/SLAE.h
@@ -77,8 +77,8 @@ add_executable(test_Matrix
         Lib/Algebra.h
         Lib/MathFiles/MathFiles.h
         Lib/MathFiles/MathFiles.tpp
-        Lib/Vectors/Vector.h
-        Lib/Vectors/Vector.tpp
+        Lib/Vector/Vector.h
+        Lib/Vector/Vector.tpp
         Lib/Matrix/Matrix.h
         Lib/Matrix/Matrix.tpp
         Lib/SLAE/SLAE.h
@@ -97,8 +97,8 @@ add_executable(test_SLAE
         Lib/Algebra.h
         Lib/MathFiles/MathFiles.h
         Lib/MathFiles/MathFiles.tpp
-        Lib/Vectors/Vector.h
-        Lib/Vectors/Vector.tpp
+        Lib/Vector/Vector.h
+        Lib/Vector/Vector.tpp
         Lib/Matrix/Matrix.h
         Lib/Matrix/Matrix.tpp
         Lib/SLAE/SLAE.h
@@ -117,8 +117,8 @@ add_executable(test_Equation
         Lib/Algebra.h
         Lib/MathFiles/MathFiles.h
         Lib/MathFiles/MathFiles.tpp
-        Lib/Vectors/Vector.h
-        Lib/Vectors/Vector.tpp
+        Lib/Vector/Vector.h
+        Lib/Vector/Vector.tpp
         Lib/Matrix/Matrix.h
         Lib/Matrix/Matrix.tpp
         Lib/SLAE/SLAE.h
@@ -137,8 +137,8 @@ add_executable(test_Math
         Lib/Algebra.h
         Lib/MathFiles/MathFiles.h
         Lib/MathFiles/MathFiles.tpp
-        Lib/Vectors/Vector.h
-        Lib/Vectors/Vector.tpp
+        Lib/Vector/Vector.h
+        Lib/Vector/Vector.tpp
         Lib/Matrix/Matrix.h
         Lib/Matrix/Matrix.tpp
         Lib/SLAE/SLAE.h
@@ -157,8 +157,8 @@ add_executable(test_MathFiles
         Lib/Algebra.h
         Lib/MathFiles/MathFiles.h
         Lib/MathFiles/MathFiles.tpp
-        Lib/Vectors/Vector.h
-        Lib/Vectors/Vector.tpp
+        Lib/Vector/Vector.h
+        Lib/Vector/Vector.tpp
         Lib/Matrix/Matrix.h
         Lib/Matrix/Matrix.tpp
         Lib/SLAE/SLAE.h
@@ -183,8 +183,8 @@ add_executable(test_ALL
         Lib/Algebra.h
         Lib/MathFiles/MathFiles.h
         Lib/MathFiles/MathFiles.tpp
-        Lib/Vectors/Vector.h
-        Lib/Vectors/Vector.tpp
+        Lib/Vector/Vector.h
+        Lib/Vector/Vector.tpp
         Lib/Matrix/Matrix.h
         Lib/Matrix/Matrix.tpp
         Lib/SLAE/SLAE.h

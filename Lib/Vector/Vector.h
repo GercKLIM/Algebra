@@ -204,7 +204,7 @@ public:
 
 
     /* Функция для нормы вектора */
-    T norm(const int& p);
+    T norm(const int& p = 2);
 
 
 

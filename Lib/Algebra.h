@@ -1,8 +1,7 @@
-//
-// Объявление функций и переопределений для std::vector
-// для возможности абстракции в математические векторы, матрицы и другой доп. функционал
-//
-
+/*
+ *  БИБЛИОТЕКА "АЛГЕБРА"
+ *
+ */
 
 #pragma once
 
@@ -17,15 +16,14 @@
 #include <iomanip>
 #include <initializer_list>
 #include <algorithm>
+#include <functional>
+#include <stdexcept>
 
 
 /* ВЫЗОВ РЕАЛИЗАЦИЙ */
 
-/* Функции для Импорта/Экспорта матриц и векторов их тектового файла */
-#include "MathFiles/MathFiles.h"
-
 /* Функции алгебры векторов */
-#include "Vectors/Vector.h"
+#include "Vector/Vector.h"
 
 /* Функции алгебры матриц */
 #include "Matrix/Matrix.h"
@@ -35,6 +33,9 @@
 
 /* Функции алгебры уравнений (простых) */
 #include "Equation/Equation.h"
+
+/* Функции для Импорта/Экспорта матриц и векторов их тектового файла */
+#include "MathFiles/MathFiles.h"
 
 /* Некоторые другие функции математики */
 #include "Math/Math.h"
