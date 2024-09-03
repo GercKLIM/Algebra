@@ -1,10 +1,12 @@
 #include <iostream>
-#include "Lib/algebra.h"
+
+
+/* ### ВЫЗОВ БИБЛИОТЕКИ АЛГЕБРЫ ### */
+#include "Lib/Algebra.h"
+
 
 int main() {
-    std::cout << "E = " << std::endl;
-    std::vector<std::vector<double>> E = create_identity_matrix<double>(5);
-    print(E);
-    //std::cout << E << std::endl;
+
+    std::cout << "Complete!" << std::endl;
     return 0;
 }

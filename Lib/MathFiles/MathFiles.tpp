@@ -5,80 +5,99 @@
  * */
 
 
-#include "../algebra.h"
+#include "../Algebra.h"
 
 
 /* ### ФУНКЦИИ ИМПОРТА ### */
 
 
-/* Функция импорта чисел из файла */
-std::vector<double> ImportData(const std::string& filename) {
-    std::vector<double> numbers;
 
-    // Открытие файла для чтения
-    std::ifstream file(filename);
+/* Функция записи матрицы в файл */
+template <typename T>
+bool MathFile<T>::write(const Matrix<T>& A) {
+    file.open(filename, std::ios::out | std::ios::trunc);  // Открываем файл на запись
     if (!file.is_open()) {
-        std::cerr << "Failed to open file: " << filename << std::endl;
-        return numbers;
+        return false;  // Если файл не открылся, возвращаем false
     }
 
-    std::string line;
-    while (std::getline(file, line)) {
-        // Преобразование строки в число типа double и добавление его в вектор
-        double num = std::atof(line.c_str());
-        numbers.push_back(num);
+    // Записываем размер матрицы
+    file << A.rows() << " " << A.cols() << std::endl;
+
+    // Записываем элементы матрицы
+    for (size_t i = 0; i < A.rows(); ++i) {
+        for (size_t j = 0; j < A.cols(); ++j) {
+            file << A(i, j) << " ";
+        }
+        file << std::endl;
     }
 
-    // Закрытие файла
-    file.close();
-
-    return numbers;
+    file.close();  // Закрываем файл
+    return true;
 }
 
-
-/* Функция импорта матрицы из текстового файла */
+/* Функция записи вектора в файл */
 template <typename T>
-std::vector<std::vector<T>> importSLAU(const std::string& filename) {
-    std::vector<std::vector<T>> matrix;
-    std::vector<T> vec;
-    std::ifstream file(filename);
-
+bool MathFile<T>::write(const Vector<T>& vec) {
+    file.open(filename, std::ios::out | std::ios::trunc);  // Открываем файл на запись
     if (!file.is_open()) {
-        std::cout << "Error: not open file \n" << std::endl;
-        exit(1);
+        return false;  // Если файл не открылся, возвращаем false
     }
 
-    int size;
-    file >> size;
+    // Записываем размер вектора
+    file << vec.size() << std::endl;
 
-    matrix.resize(size, std::vector<T>(size+1));
+    // Записываем элементы вектора
+    for (size_t i = 0; i < vec.size(); ++i) {
+        file << vec[i] << " ";
+    }
 
-    for (int i = 0; i < size; ++i) {
-        for (int j = 0; j < size; ++j) {
-            T value;
-            if (file >> value) {
-                matrix[i][j] = value;
-            }
+    file << std::endl;
+    file.close();  // Закрываем файл
+    return true;
+}
+
+/* Функция получения матрицы из файла */
+template <typename T>
+Matrix<T> MathFile<T>::getMatrix() {
+    file.open(filename, std::ios::in);  // Открываем файл на чтение
+    if (!file.is_open()) {
+        throw std::runtime_error("Unable to open file");  // Выбрасываем исключение при неудаче
+    }
+
+    size_t rows, cols;
+    file >> rows >> cols;  // Читаем размер матрицы
+
+    Matrix<T> A(rows, cols);
+
+    // Читаем элементы матрицы
+    for (size_t i = 0; i < rows; ++i) {
+        for (size_t j = 0; j < cols; ++j) {
+            file >> A(i, j);
         }
     }
 
-    file.close();
-    return matrix;
-};
+    file.close();  // Закрываем файл
+    return A;
+}
 
-
-/* Переопределение потока вывода для vector  */
-template<typename T>
-std::ostream& operator<<(std::ostream& os, const std::vector<T>& vec) {
-    //os << "[";
-    for (int i = 0; i < vec.size(); ++i) {
-        os << std::setprecision(16) << vec[i];
-        if (i != vec.size() - 1) {
-            os << " ";
-            //os << ", ";
-        }
+/* Функция получения вектора из файла */
+template <typename T>
+Vector<T> MathFile<T>::getVector() {
+    file.open(filename, std::ios::in);  // Открываем файл на чтение
+    if (!file.is_open()) {
+        throw std::runtime_error("Unable to open file");  // Выбрасываем исключение при неудаче
     }
-    //os << "]";
-    os << " ";
-    return os;
+
+    size_t size;
+    file >> size;  // Читаем размер вектора
+
+    Vector<T> vec(size);
+
+    // Читаем элементы вектора
+    for (size_t i = 0; i < size; ++i) {
+        file >> vec[i];
+    }
+
+    file.close();  // Закрываем файл
+    return vec;
 }
